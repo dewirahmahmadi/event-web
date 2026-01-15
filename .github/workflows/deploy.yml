@@ -30,6 +30,10 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Prepare deployment files
+        run: |
+          cp ecosystem.config.cjs dist/
+
       - name: Copy files to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -37,7 +41,7 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          source: "dist/*,ecosystem.config.cjs"
+          source: "dist/*"
           target: /var/www/event-ticketing
           strip_components: 1
 
