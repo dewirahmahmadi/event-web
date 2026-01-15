@@ -30,10 +30,6 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Prepare deployment files
-        run: |
-          cp ecosystem.config.cjs dist/
-
       - name: Copy files to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -53,16 +49,11 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            cd /var/www/event-ticketing
-
-            # Install serve globally if not installed
-            npm list -g serve || npm install -g serve
-
             # Stop existing PM2 process if running
             pm2 delete event-ticketing 2>/dev/null || true
 
-            # Start the application with PM2
-            pm2 start ecosystem.config.cjs
+            # Start the application with PM2 serve
+            pm2 serve /var/www/event-ticketing 3000 --name event-ticketing --spa
 
             # Save PM2 process list
             pm2 save
