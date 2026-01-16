@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import { CalendarDays, MapPin, Users, RefreshCw } from 'lucide-react'
+import { CalendarDays, MapPin, RefreshCw } from 'lucide-react'
 
 const POLLING_INTERVAL = 5000 // 5 seconds for real-time updates
 
@@ -50,18 +50,7 @@ function EventCard({ event }) {
           <MapPin className="h-4 w-4" />
           <span className="line-clamp-1">{event.location}</span>
         </div>
-        <div className="flex items-center gap-2 text-sm">
-          <Users className="h-4 w-4" />
-          <span className={event.isFull ? 'text-destructive font-medium' : 'text-muted-foreground'}>
-            {event.currentRegistrations} / {event.maxAttendees || 'Unlimited'} attendees
-          </span>
-          {isOngoing && (
-            <span className="ml-auto flex items-center gap-1 text-green-600 text-xs">
-              <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-              Live
-            </span>
-          )}
-        </div>
+
       </CardContent>
       <CardFooter>
         <Link to={`/events/${event.id}`} className="w-full">

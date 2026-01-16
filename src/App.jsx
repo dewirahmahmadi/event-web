@@ -5,6 +5,7 @@ import LoginPage from '@/pages/LoginPage'
 import SignupPage from '@/pages/SignupPage'
 import EventsPage from '@/pages/EventsPage'
 import EventDetailPage from '@/pages/EventDetailPage'
+import EventLivePage from '@/pages/EventLivePage'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/events" element={<EventsPage />} />
             <Route path="/events/:id" element={<EventDetailPage />} />
+            <Route path="/events/:id/live" element={<EventLivePage />} />
           </Route>
 
           {/* Redirect root to events */}

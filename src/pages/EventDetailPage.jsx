@@ -11,12 +11,12 @@ import { Spinner } from '@/components/ui/spinner'
 import {
   CalendarDays,
   MapPin,
-  Users,
   Clock,
   ArrowLeft,
   CheckCircle2,
   AlertCircle,
-  RefreshCw
+  RefreshCw,
+  Radio,
 } from 'lucide-react'
 
 const POLLING_INTERVAL = 3000 // 3 seconds for real-time updates on detail page
@@ -72,17 +72,14 @@ export default function EventDetailPage() {
     }
   }, [id, isAuthenticated, user])
 
-  // Initial fetch
   useEffect(() => {
     fetchEvent(true)
   }, [fetchEvent])
 
-  // Check user registration
   useEffect(() => {
     checkUserRegistration()
   }, [checkUserRegistration])
 
-  // Polling for real-time updates
   useEffect(() => {
     const interval = setInterval(() => {
       fetchEvent(false)
@@ -280,46 +277,6 @@ export default function EventDetailPage() {
             </div>
           </div>
 
-          {/* Attendee Count - Real-time */}
-          <div className="bg-muted/50 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Users className="h-5 w-5" />
-                <div>
-                  <p className="font-medium">Attendees</p>
-                  <p className="text-2xl font-bold">
-                    {event.currentRegistrations}
-                    {event.maxAttendees && (
-                      <span className="text-muted-foreground font-normal text-lg"> / {event.maxAttendees}</span>
-                    )}
-                  </p>
-                </div>
-              </div>
-              <div className="text-right">
-                {event.maxAttendees && (
-                  <div>
-                    {event.isFull ? (
-                      <Badge variant="destructive" className="text-sm">No spots available</Badge>
-                    ) : (
-                      <Badge variant="success" className="text-sm">{availableSpots} spots left</Badge>
-                    )}
-                  </div>
-                )}
-                {isOngoing && (
-                  <div className="flex items-center gap-2 mt-2 text-sm text-green-600">
-                    <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                    <span>Live updates</span>
-                  </div>
-                )}
-              </div>
-            </div>
-            {lastUpdated && (
-              <p className="text-xs text-muted-foreground mt-2">
-                Last updated: {lastUpdated.toLocaleTimeString()}
-              </p>
-            )}
-          </div>
-
           {/* Registration Status */}
           {registrationStatus && (
             <Alert variant={registrationStatus === 'success' ? 'success' : registrationStatus === 'already-registered' ? 'default' : 'destructive'}>
@@ -346,6 +303,16 @@ export default function EventDetailPage() {
                 {userRegistration.isAttending && ' You are marked as attending.'}
               </AlertDescription>
             </Alert>
+          )}
+
+          {/* Join Live Button - Show when user is registered and event is ongoing */}
+          {isUserRegistered && isOngoing && (
+            <Link to={`/events/${id}/live`} className="block">
+              <Button className="w-full bg-green-600 hover:bg-green-700">
+                <Radio className="mr-2 h-4 w-4 animate-pulse" />
+                Join Live Event
+              </Button>
+            </Link>
           )}
 
           {/* Registration Button */}
